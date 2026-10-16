@@ -30,6 +30,10 @@
 			<button type="submit">Submit</button>
 		</form>
 
+		{#if guessState.duplicated}
+			<p>You've guessed it once! Please retry.</p>
+		{/if}
+
 		{#if guessState.current}
 			<p>
 				You've guessed <b>{guessState.current}</b>, it's

@@ -7,14 +7,27 @@ export class GuessState {
   correct = $state(false);
   success: string[] = $state([]);
   failure: string[] = $state([]);
+  duplicated = $state(false);
 
   constructor(post: Post | null) {
     this.post = post;
   }
 
+  private isDuplicated(guess: string) {
+    return this.success.includes(guess) || this.failure.includes(guess);
+  }
+
   update(guess: string) {
     if (this.post === null)
       return;
+
+    if (this.isDuplicated(guess)) {
+      this.duplicated = true;
+      this.current = '';
+      return;
+    } else {
+      this.duplicated = false;
+    }
 
     this.current = guess;
     this.correct = this.post.tags.includes(guess);
