@@ -13,7 +13,10 @@
 	let playerGuess = $state('');
 	let guessState = $derived(new GuessState(post));
 
-	const onclick = () => guessState.update(playerGuess);
+	const onsubmit = (e: SubmitEvent) => {
+		e.preventDefault();
+		guessState.update(playerGuess);
+	};
 </script>
 
 <div class="container">
@@ -21,9 +24,11 @@
 		<p>Loading random post...</p>
 	{:else}
 		<img class="canvas" src={post.url} alt="A random post" />
-		<label for="player-guess">Type your guess: </label>
-		<input type="text" id="player-guess" bind:value={playerGuess} />
-		<button {onclick}>Submit</button>
+		<form {onsubmit}>
+			<label for="player-guess">Type your guess: </label>
+			<input type="text" id="player-guess" bind:value={playerGuess} />
+			<button type="submit">Submit</button>
+		</form>
 
 		{#if guessState.current}
 			<p>
