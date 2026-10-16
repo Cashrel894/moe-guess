@@ -2,13 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { Post } from '#lib/types.ts';
 	import { getRandomPost } from '#lib/safebooru.ts';
-
-	type GuessState = {
-		current: string;
-		correct: boolean;
-		success: string[];
-		failure: string[];
-	};
+	import { GuessState } from './GuessState.svelte';
 
 	let post: Post | null = $state(null);
 
@@ -17,24 +11,9 @@
 	});
 
 	let playerGuess = $state('');
-	let guessState: GuessState = $state({
-		current: '',
-		correct: false,
-		success: [],
-		failure: []
-	});
+	let guessState = $derived(new GuessState(post));
 
-	const onclick = () => {
-		if (!post) {
-			return;
-		}
-
-		guessState.current = playerGuess;
-		guessState.correct = post.tags.includes(playerGuess);
-
-		const arrayToPush = guessState.correct ? guessState.success : guessState.failure;
-		arrayToPush.push(playerGuess);
-	};
+	const onclick = () => guessState.update(playerGuess);
 </script>
 
 <div class="container">
